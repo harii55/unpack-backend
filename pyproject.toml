@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "audio-blog-pipeline"
+version = "0.1.0"
+description = "An async pipeline to convert text blogs into high-quality audio blogs."
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "litestar",
+    "litestar-granian",
+    "asyncpg",
+    "sqlalchemy[asyncio]",
+    "advanced-alchemy",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+]
+
+[tool.ruff]
+line-length = 90
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint]
+select = [
+    "F", 
+    "E", 
+    "W", 
+    "I", 
+    "B", 
+    "UP", 
+    "SIM", 
+    "ASYNC", 
+    "RUF", 
+    "S", 
+    "RET", 
+    "TCH", 
+    "PT", 
+    "ARG", 
+    "D"
+]
+ignore = [
+    "E501",
+    "D100",
+    "D104",
+    "D105",
+    "D106",
+    "D107"
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = ["app"] 
+
+[tool.ruff.lint.pydocstyle]
+convention = "google" 
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = ["D", "S101", "S105"]
+"scripts/**/*" = ["D"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
