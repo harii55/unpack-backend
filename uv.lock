@@ -105,18 +105,18 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "advanced-alchemy" },
-    { name = "asyncpg" },
-    { name = "litestar" },
-    { name = "litestar-granian" },
-    { name = "sqlalchemy", extras = ["asyncio"] },
+    { name = "advanced-alchemy", specifier = ">=0.30.0" },
+    { name = "asyncpg", specifier = ">=0.30.0" },
+    { name = "litestar", specifier = ">=2.12.0,<3.0.0" },
+    { name = "litestar-granian", specifier = ">=0.2.0" },
+    { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.40,<3.0.0" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "ruff" },
+    { name = "pytest", specifier = ">=8.3.4" },
+    { name = "pytest-asyncio", specifier = ">=0.24.0" },
+    { name = "ruff", specifier = ">=0.9.0" },
 ]
 
 [[package]]
