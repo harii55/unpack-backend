@@ -130,3 +130,15 @@ def get_steps_after(step: PipelineStep) -> list[PipelineStep]:
     """Returns all steps that come after this one. Used to invalidate stale artifacts."""
     idx = get_step_index(step)
     return PIPELINE_STEP_ORDER[idx + 1:]
+
+def get_rollback_status(step: PipelineStep) -> PipelineStatus:
+    rollback_map = {
+        PipelineStep.TERM_EXTRACTION: PipelineStatus.DRAFT,
+        PipelineStep.ANALYSIS: PipelineStatus.TERMS_EXTRACTED,
+        PipelineStep.BLUEPRINT: PipelineStatus.ANALYZED,
+        PipelineStep.SCRIPT_GENERATION: PipelineStatus.BLUEPRINTED,
+        PipelineStep.QUALITY_GATE: PipelineStatus.SCRIPTED,
+        PipelineStep.TTS_PREPARATION: PipelineStatus.REVIEWED_PASS,
+        PipelineStep.AUDIO_GENERATION: PipelineStatus.TTS_READY,
+    }
+    return rollback_map[step]
