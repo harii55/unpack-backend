@@ -15,6 +15,9 @@ dependencies = [
     "asyncpg>=0.30.0",
     "sqlalchemy[asyncio]>=2.0.40,<3.0.0",
     "advanced-alchemy>=0.30.0",
+    "python-dotenv>=1.2.2",
+    "groq>=1.1.1",
+    "edge-tts>=7.2.7",
 ]
 
 [dependency-groups]
