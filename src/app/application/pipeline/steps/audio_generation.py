@@ -5,7 +5,7 @@ from uuid import UUID
 from app.application.pipeline.context import PipelineContext
 from app.application.pipeline.steps.base import BasePipelineStep, StepResult
 from app.common.types import PipelineStep
-from app.infrastructure.audio_storage.port import StoragePort
+from app.infrastructure.audio_storage.port import AudioStoragePort
 from app.infrastructure.tts.port import TTSPort
 
 
@@ -15,7 +15,7 @@ class AudioGenerationStep(BasePipelineStep):
     Calls TTS for audio bytes, then Storage to persist them.
     """
 
-    def __init__(self, tts: TTSPort, storage: StoragePort, blog_id: UUID):
+    def __init__(self, tts: TTSPort, storage: AudioStoragePort, blog_id: UUID):
         self._tts = tts
         self._storage = storage
         self._blog_id = blog_id

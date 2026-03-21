@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 
-from app.domain.pronunciations import PronunciationEntry
+from app.domain.pronunciations.models import PronunciationEntry
 
 
 @dataclass
