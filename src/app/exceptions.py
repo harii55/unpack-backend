@@ -61,6 +61,9 @@ class TTSClientError(PipelineError):
     """Raised when audio generation fails."""
     pass
 
+class AudioStorageError(PipelineError):
+    """Raised when writing audio bytes to disk or cloud storage fails."""
+    pass
 
 class QualityGateHaltError(PipelineError):
     """Raised when quality gate returns REVISE or FAIL. Pipeline halts for admin review."""
