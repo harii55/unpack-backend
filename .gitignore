@@ -10,3 +10,6 @@ wheels/
 .venv
 .ruff_cache
 .env
+storage/
+notes/
+Insights/
