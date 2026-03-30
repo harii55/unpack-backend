@@ -109,3 +109,18 @@ class BlogCommandService:
         blog.audio_file_path = file_path
         blog.audio_duration_seconds = duration_seconds
         return blog
+    
+    async def override_quality_gate(self, blog_id: UUID) -> Blog:
+        """Admin force-passes a REVISE/FAIL verdict to continue the pipeline."""
+        blog = await self._blog_repo.get(blog_id)
+
+        if blog.pipeline_status not in (
+            PipelineStatus.REVIEWED_REVISE,
+            PipelineStatus.REVIEWED_FAIL,
+        ):
+            raise InvalidStateTransitionError(
+                blog.pipeline_status, PipelineStatus.REVIEWED_PASS,
+            )
+
+        blog.pipeline_status = PipelineStatus.REVIEWED_PASS
+        return blog
