@@ -33,9 +33,11 @@ class QualityGateStep(BaseLLMStep):
         context: PipelineContext,
     ) -> list[dict[str, str]]:
         script = artifacts[PipelineStep.SCRIPT_GENERATION]
+        blueprint = artifacts[PipelineStep.BLUEPRINT]
+
         return [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": build_user_prompt(source_text, script)},
+            {"role": "user", "content": build_user_prompt(source_text, blueprint, script)},
         ]
 
     def _parse_response(self, raw: str) -> StepResult:

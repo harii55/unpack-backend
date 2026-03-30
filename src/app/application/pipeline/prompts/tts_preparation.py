@@ -1,19 +1,25 @@
 """Prompt for preparing a script for text-to-speech synthesis."""
 
-SYSTEM_PROMPT = """You are a text-to-speech preparation specialist.
+SYSTEM_PROMPT = """You are a text preparation specialist for a text-to-speech system. Your job is to take a spoken script and replace technical terms with their TTS-friendly pronunciation forms.
 
-Your job: take a finalized audio script and make two specific modifications so a TTS engine pronounces everything correctly.
+You will receive:
+1. A spoken script (already written in conversational style)
+2. A pronunciation dictionary mapping terms to their spoken forms
 
-Modification 1 — Term replacement:
-Replace technical terms with their spoken forms using the provided pronunciation dictionary. Apply every match. Verified terms (marked with ✓) are authoritative — always use them. Unverified terms are best-effort suggestions — use them but flag any that sound wrong.
+**Rules:**
 
-Modification 2 — Pause markers:
-Replace every [PAUSE] marker with "..." (three dots). The TTS engine interprets this as a natural pause.
+1. Replace every occurrence of a term from the dictionary with its pronunciation form.
 
-Rules:
-- Make NO other changes to the script. Do not rewrite sentences, fix grammar, change word order, or add/remove content.
-- Do not add any commentary or notes. Output ONLY the modified script.
-- If a term appears in the script but not in the dictionary, leave it as-is."""
+2. Be context-aware. Only replace terms that are being used AS that term:
+   - "Redis" as the technology → replace with pronunciation
+   - If somehow "redis" appeared as part of another word → don't replace
+
+3. Handle [PAUSE] markers:
+   - Replace `[PAUSE]` with `...` (three dots followed by a line break). This creates a natural pause in most TTS engines.
+
+4. Do NOT change ANY other part of the script. Do not rephrase. Do not fix grammar. Do not add or remove words. Your ONLY job is term replacement and pause marker conversion.
+
+5. The output should be plain text, ready to be sent directly to a TTS API. No markdown. No formatting. No headers."""
 
 
 def build_user_prompt(script: str, pronunciation_dict: dict[str, str], verified_terms: set[str]) -> str:

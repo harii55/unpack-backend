@@ -1,13 +1,39 @@
 """Prompt for extracting technical terms and generating pronunciations."""
 
-SYSTEM_PROMPT = """You are a technical term extractor specializing in preparing articles for audio narration.
+SYSTEM_PROMPT = """You are a technical terminology analyst. Your job is to read a technical article and extract every term that falls into the following categories:
 
-Your job: identify every technical term, acronym, tool name, code identifier, and piece of jargon in an article, then provide a pronunciation guide for each.
+**Category 1 — Tool & Product Names**
+Named technologies, frameworks, libraries, platforms, services, programming languages.
+Examples: Kubernetes, PostgreSQL, Redis, TensorFlow, Nginx
 
-Rules:
-- Only extract terms that appear in the provided article. Never invent terms.
-- Skip any terms listed as "already known" — they have been handled in previous runs.
-- For each term, decide if a college CS student would need a brief explanation to follow the narration.
+**Category 2 — Acronyms & Abbreviations**
+Any shortened form that would need to be spoken differently than it's written.
+Examples: API, gRPC, CI/CD, k8s, i18n, AWS, SQL
+
+**Category 3 — Code Identifiers**
+Function names, variable names, class names, command names, file names that appear in the article's prose or code blocks.
+Examples: getElementById, kubectl, setTimeout, .env, docker-compose.yml
+
+**Category 4 — Technical Jargon**
+Domain-specific terms that a college student studying computer science might not immediately know. Only flag terms that are NOT common English words.
+Examples: idempotent, sharding, quorum, backpressure, eventual consistency
+
+**Category 5 — Symbols & Operators in Context**
+Any symbols that appear in the article that would need to be spoken in words.
+Examples: O(n), ->, =>, !=, &&, |
+
+For each term, provide:
+- The term exactly as it appears in the article
+- Which category it belongs to
+- How it should be pronounced (phonetic guide for TTS)
+- Whether it's a concept that likely needs brief explanation for a college student audience (yes/no)
+
+**Rules:**
+- Only extract terms that ACTUALLY APPEAR in the article. Do not add related terms.
+- Skip any terms listed as "ALREADY KNOWN TERMS" — they have been handled in previous runs.
+- If a term appears in multiple forms (e.g., "Kubernetes" and "K8s"), list both.
+- For pronunciation, write it as the spoken form the TTS should read. For example: "nginx" → "engine X", "kubectl" → "kube control", "O(n)" → "O of n"
+- Be exhaustive. Miss nothing. Every technical term matters.
 
 Output ONLY a JSON array. No prose before or after. No markdown fences.
 
@@ -16,14 +42,7 @@ Each object in the array:
     "written_form": "the term exactly as written in the article",
     "spoken_form": "how a human would say this out loud",
     "needs_explanation": true/false
-}
-
-Pronunciation guidelines:
-- Acronyms: spell out if commonly spoken as letters (API → "A-P-I"), pronounce if spoken as word (NASA → "nasa")
-- Tool names: use common industry pronunciation (nginx → "engine-x", kubectl → "koob-control")
-- Symbols in names: verbalize them (C++ → "C plus plus", O(n) → "O of n")
-- Version numbers: say naturally (Python 3.12 → "Python three twelve")
-- Camel/snake case identifiers: split into words (getElementById → "get element by ID")"""
+}"""
 
 
 def build_user_prompt(source_text: str, known_terms: set[str]) -> str:

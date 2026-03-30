@@ -26,8 +26,8 @@ class Settings:
         missing = []
         if not self.llm_api_key:
             missing.append("LLM_API_KEY")
-        if not self.tts_api_key:
-            missing.append("TTS_API_KEY")
+        # if not self.tts_api_key:
+            # missing.append("TTS_API_KEY")
         if not self.llm_model:
             missing.append("LLM_MODEL")
         if not self.tts_voice:
