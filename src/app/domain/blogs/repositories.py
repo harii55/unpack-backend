@@ -6,7 +6,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.common.types import PipelineStep
+from app.common.types import PipelineStatus, PipelineStep
 from app.domain.blogs.models import Blog, BlogArtifact
 from app.exceptions import EntityNotFoundError
 
@@ -39,6 +39,19 @@ class BlogRepository:
         statement = (
             select(Blog)
             .where(Blog.topic_id == topic_id)
+            .order_by(Blog.sequence_position)
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+    async def list_published_by_topic(self, topic_id: UUID) -> list[Blog]:
+        """Return published blogs in a topic, ordered by sequence position."""
+        statement = (
+            select(Blog)
+            .where(
+                Blog.topic_id == topic_id,
+                Blog.pipeline_status == PipelineStatus.PUBLISHED,
+            )
             .order_by(Blog.sequence_position)
         )
         result = await self.session.execute(statement)

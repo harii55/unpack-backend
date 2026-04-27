@@ -35,6 +35,10 @@ class BlogQueryService:
     async def get_current_artifact(self, blog_id: UUID, step: PipelineStep) -> BlogArtifact | None:
         return await self._artifact_repo.get_current(blog_id, step)
 
+    async def list_published_by_topic(self, topic_id: UUID) -> list[Blog]:
+        """Return all published blogs in a topic, ordered by sequence position."""
+        return await self._blog_repo.list_published_by_topic(topic_id)
+
 
 # Commands (Writes)
 class BlogCommandService:
